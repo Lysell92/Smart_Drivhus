@@ -1,0 +1,7 @@
+{
+	"broker_host": "localhost",
+	"broker_port": 1883,
+	"raw_topic": "sensors/bp-12/raw",
+	"processed_topic": "gateways/bp-12/weather",
+	"device_id": "drivhusServer"
+}

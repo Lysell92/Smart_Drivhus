@@ -1,0 +1,76 @@
+^Cpeter@debian:~$ cat /usr/local/share/man/man1/beagleplay-iot.1
+.TH BEAGLEPLAY-IOT 1 "August 2026" "Beagleplay-iot" "User Commands"
+
+.SH NAME
+beagleplay-iot \- MQTT IoT telemetry beagleplay-iot
+
+.SH SYNOPSIS
+.B beagleplay-iot
+.RI [ --config " config_file" ]
+
+.SH DESCRIPTION
+.B beagleplay-iot
+is an MQTT subscriber application designed to receive and process telemetry data from external IoT devices or services.
+
+The application uses the Eclipse Mosquitto MQTT client library to establish a subscriber connection to an MQTT broker and uses the nlohmann/json library to parse incoming JSON telemetry messages.
+
+The beagleplay-iot subscribes to a configured MQTT topic, validates incoming JSON payloads, and stores received data in JSON Lines format.
+
+The application is designed as a foundation for future IoT deployments where additional sensors, devices, and processing functionality can be integrated.
+
+.SH OPTIONS
+
+.TP
+.BR \-\-config " config_file"
+Specify the path to the JSON configuration file.
+
+Example:
+
+.B
+beagleplay-iot --config /etc/beagle-subscriber/config.json
+
+.SH FILES
+
+.TP
+.beagle-subscriber.json
+Runtime configuration file containing MQTT connection settings and storage locations.
+
+.TP
+.B /vbeagle-subscribersonl
+Persistent data file where received telemetry messages are stored in JSON Lines format.
+
+.TP
+.beagle-subscriberplay-iot
+Installed executable binary.
+
+.TP
+.B /etc/systemd/system/beagleplay-iot.service
+Systemd service definition used to manage the beagleplay-iot as a background service.
+
+.SH EXIT STATUS
+
+.TP
+.B 0
+The application terminated successfully.
+
+.TP
+.B 1
+The application encountered an error during startup or execution.
+
+.SH EXAMPLES
+
+Start the beagleplay-iot manually:
+
+.B
+beagleplay-iot --config beagle-subscriber.json
+
+Start using systemd:
+
+.B
+systemctl start beagleplay-iot
+
+.SH AUTHOR
+Written by Peter.
+
+.SH SEE ALSO
+.BR mosquitto (1)
