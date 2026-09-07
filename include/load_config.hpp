@@ -16,9 +16,6 @@ struct Config
     std::string processed_topic;
     
     std::string device_id;
-    // std::string i2c_device;
-    // int sensor_address = 0x76;
-
 };
 
 extern Config app_config;

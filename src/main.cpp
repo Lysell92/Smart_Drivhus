@@ -62,21 +62,6 @@ int main(int argc, char* argv[])
 	mosquitto_message_callback_set(mosq, MessageHandler::on_message);
 	mosquitto_subscribe_callback_set(mosq, on_subscribe);
 
-	/* SensorPublisher sensor_publisher(
-	mosq,
-	app_config.i2c_device,
-	app_config.sensor_address,
-	app_config.raw_topic
-	);
-	
-	if (!sensor_publisher.init())
-	{
-		std::cerr << "Failed to initialize sensor\n";
-		mosquitto_destroy(mosq);
-		mosquitto_lib_cleanup();
-		return 1;
-	} */
-
 	
 	int rc = mosquitto_connect(mosq, app_config.broker_host.c_str(), app_config.broker_port, 60);
 
@@ -99,10 +84,6 @@ int main(int argc, char* argv[])
 
 	 while (true)
 	{
-		/* if () //!sensor_publisher.publish()
-		{
-			std::cerr << "Failed to publish sensor data\n";
-		} */
 		std::this_thread::sleep_for(
 			std::chrono::seconds(10)
 		);
