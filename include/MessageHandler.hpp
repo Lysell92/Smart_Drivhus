@@ -21,4 +21,15 @@ class MessageHandler
         const json& message,
         std::string& error_message
     );
+
+    private:
+    static void handle_telemetry(
+        struct mosquitto *mosq,
+        json& telemetry
+    );
+
+    static void handle_plant_analysis(
+        struct mosquitto *mosq,
+        json& analysis
+    );
 };

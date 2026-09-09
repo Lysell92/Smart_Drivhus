@@ -8,7 +8,7 @@ void MessageHandler::on_message(
 )
 {
     (void)obj;
-    (void)mosq;
+
     std::string payload 
     (
         static_cast<char *>(msg->payload), 
@@ -23,61 +23,130 @@ void MessageHandler::on_message(
 
     try 
     {
-        json telemetry = json::parse(payload); 
+        json message = json::parse(payload); 
+
+        std::cout
+        << "MESSAGE TOPIC: [" << msg->topic << "]\n"
+        << "CONFIG PLANT TOPIC: [" << app_config.plant_analysis_topic << "]\n";
         
-        std::string error_message;
-
-        if (!validate_message(telemetry, error_message))
+        if (std::string(msg->topic) == app_config.raw_topic)
         {
-            std::cerr
-                << "Invalid telemetry: "
-                << error_message
-                << '\n';
+            std::cout << ">>> TELEMETRY MATCH <<<\n";
+            handle_telemetry(mosq, message);
+        }
+        
 
-            return;
+        else if (std::string(msg->topic) == app_config.plant_analysis_topic)
+        {
+            std::cout << ">>> PLANT MATCH <<<\n";
+            handle_plant_analysis(mosq, message);
         }
 
-
-
-        auto now = std::chrono::system_clock::now();
-        std::time_t time_now = std::chrono::system_clock::to_time_t(now);
-        std::tm utc_time = *std::gmtime(&time_now);
-        std::ostringstream timestamp_stream;
-
-        timestamp_stream 
-            << std::put_time(&utc_time, "%Y-%m-%dT%H:%M:%SZ");
-        std::string timestamp = timestamp_stream.str();
-        
-        telemetry["device_id"] = app_config.device_id;
-        telemetry["timestamp"] = timestamp;
-
-        std::string processed_payload = telemetry.dump();
-
-        int rc = mosquitto_publish
-        (
-            mosq,
-            nullptr,
-            app_config.processed_topic.c_str(),
-            static_cast<int>(processed_payload.size()),
-            processed_payload.c_str(),
-            1,
-            false
-        );
-
-        if (rc != MOSQ_ERR_SUCCESS)
+        else
         {
-            std::cerr
-                << "Error publishing processed telemetry: "
-                << mosquitto_strerror(rc)
-                << '\n';
+            std::cout << ">>> NO TOPIC MATCH <<<\n";
         }
+
     }
-    catch(const json::exception& e)
+
+    catch (const json::exception& e)
     {
-        std::cerr   
-            << "JSON processing error: " 
-            << e.what() 
-            << "\n";
+        std::cerr
+            << "JSON processing error: "
+            << e.what()
+            << '\n';
+    }
+}
+void MessageHandler::handle_telemetry(
+struct mosquitto *mosq,
+json& telemetry
+)
+{
+    std::string error_message;
+
+    if (!validate_message(telemetry, error_message))
+    {
+        std::cerr
+            << "Invalid telemetry: "
+            << error_message
+            << '\n';
+
+        return;
+    }
+
+    auto now = std::chrono::system_clock::now();
+    std::time_t time_now = std::chrono::system_clock::to_time_t(now);
+    std::tm utc_time = *std::gmtime(&time_now);
+    std::ostringstream timestamp_stream;
+
+    timestamp_stream 
+        << std::put_time(&utc_time, "%Y-%m-%dT%H:%M:%SZ");
+    std::string timestamp = timestamp_stream.str();
+    
+    telemetry["device_id"] = app_config.device_id;
+    telemetry["timestamp"] = timestamp;
+
+    std::string processed_payload = telemetry.dump();
+
+    int rc = mosquitto_publish
+    (
+        mosq,
+        nullptr,
+        app_config.processed_topic.c_str(),
+        static_cast<int>(processed_payload.size()),
+        processed_payload.c_str(),
+        1,
+        false
+    );
+
+    if (rc != MOSQ_ERR_SUCCESS)
+    {
+        std::cerr
+            << "Error publishing processed telemetry: "
+            << mosquitto_strerror(rc)
+            << '\n';
+    }
+}
+
+void MessageHandler::handle_plant_analysis(
+struct mosquitto *mosq,
+json& analysis
+)
+{
+
+    std::cout << "HANDLE PLANT ANALYSIS CALLED\n";
+
+    auto now = std::chrono::system_clock::now();
+    std::time_t time_now =
+        std::chrono::system_clock::to_time_t(now);
+
+    std::tm utc_time = *std::gmtime(&time_now);
+
+    std::ostringstream timestamp_stream;
+
+    timestamp_stream
+        << std::put_time(&utc_time, "%Y-%m-%dT%H:%M:%SZ");
+
+    analysis["timestamp"] = timestamp_stream.str();
+
+    std::string processed_payload = analysis.dump();
+
+    int rc = mosquitto_publish(
+        mosq,
+        nullptr,
+        app_config.processed_plant_analysis_topic.c_str(),
+        static_cast<int>(processed_payload.size()),
+        processed_payload.c_str(),
+        1,
+        false
+    );
+
+    if (rc != MOSQ_ERR_SUCCESS)
+    {
+        std::cerr
+            << "Error publishing plant analysis: "
+            << mosquitto_strerror(rc)
+            << '\n';
     }
 }
 

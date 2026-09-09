@@ -14,6 +14,8 @@ struct Config
     
     std::string raw_topic;
     std::string processed_topic;
+    std::string plant_analysis_topic;
+    std::string processed_plant_analysis_topic;
     
     std::string device_id;
 };

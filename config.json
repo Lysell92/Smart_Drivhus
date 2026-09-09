@@ -3,5 +3,7 @@
 	"broker_port": 1883,
 	"raw_topic": "sensors/drivhusServer/raw",
 	"processed_topic": "drivhusData/drivhusServer/telemetry",
+	"plant_analysis_topic": "plants/drivhusServer/plant_analysis",
+	"processed_plant_analysis_topic": "drivhusData/drivhusServer/plant_analysis",
 	"device_id": "drivhusServer"
 }
