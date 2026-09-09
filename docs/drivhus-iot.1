@@ -1,0 +1,64 @@
+.TH DRIVHUS-IOT 1 "September 2026" "drivhus-iot" "User Commands"
+.SH NAME
+drivhus-iot \- greenhouse IoT MQTT subscriber
+.SH SYNOPSIS
+.B drivhus-iot
+.SH DESCRIPTION
+.B drivhus-iot
+subscribes to greenhouse MQTT topics, processes sensor telemetry and
+PlantCV analysis messages, and republishes the processed data for
+storage by Telegraf and PostgreSQL.
+.PP
+The program normally runs as a systemd service.
+.SH FILES
+.TP
+.I /etc/drivhus-subscriber/config.json
+JSON configuration file.
+.TP
+.I /opt/drivhus-subscriber/drivhus-iot
+Installed executable.
+.TP
+.I /etc/systemd/system/drivhus-iot.service
+systemd service definition.
+.SH SERVICE COMMANDS
+Start the service:
+.PP
+.nf
+sudo systemctl start drivhus-iot
+.fi
+.PP
+Stop the service:
+.PP
+.nf
+sudo systemctl stop drivhus-iot
+.fi
+.PP
+Check its status:
+.PP
+.nf
+sudo systemctl status drivhus-iot
+.fi
+.PP
+View live logs:
+.PP
+.nf
+journalctl -u drivhus-iot -f
+.fi
+.SH MQTT TOPICS
+.TP
+.I sensors/drivhusServer/raw
+Incoming sensor telemetry.
+.TP
+.I plants/drivhusServer/plant_analysis
+Incoming PlantCV analysis results.
+.TP
+.I drivhusData/drivhusServer/telemetry
+Processed telemetry.
+.TP
+.I drivhusData/drivhusServer/plant_analysis
+Processed PlantCV results.
+.SH SEE ALSO
+.BR systemctl (1),
+.BR journalctl (1)
+.SH AUTHOR
+Greenhouse IoT project
