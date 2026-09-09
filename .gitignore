@@ -9,4 +9,12 @@ obj/
 *.a
 *.lib
 *.dll
-*.so
+*.s
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# PlantCV generated output
+plantCV/output/
