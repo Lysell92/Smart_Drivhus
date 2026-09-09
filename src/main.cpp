@@ -8,7 +8,6 @@
 #include "load_config.hpp"
 #include "on_subscribe.hpp"
 #include "on_connect.hpp"
-#include "sensor_publisher.hpp"
 
 
 void print_help()

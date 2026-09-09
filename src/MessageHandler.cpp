@@ -110,6 +110,24 @@ bool MessageHandler::validate_message(
         return false;
     }
 
+    if (!message.contains("lux") || !message["lux"].is_number())
+    {
+        error_message = "Lux should be a number";
+        return false;
+    }
+
+    if (!message.contains("soil_moisture") || !message["soil_moisture"].is_number())
+    {
+        error_message = "Soil moisture is measured as a number";
+        return false;
+    }
+    
+    if (!message.contains("distance_cm") || !message["distance_cm"].is_number())
+    {
+        error_message = "Distance is measures in cm as a number";
+        return false;
+    }
+
     if(message["temperature_c"] < 0 || message["temperature_c"] > 100)
     {
         error_message = "Inside temperatures normally doesn't to these temperatures, something is wrong brother";

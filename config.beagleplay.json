@@ -1,7 +1,0 @@
-{
-	"broker_host": "localhost",
-	"broker_port": 1883,
-	"raw_topic": "sensors/drivhusServer/raw",
-	"processed_topic": "gateways/drivhusServer/telemetry",
-	"device_id": "drivhusServer"
-}
