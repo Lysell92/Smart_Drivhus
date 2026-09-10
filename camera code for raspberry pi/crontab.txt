@@ -1,0 +1,2 @@
+# Take and upload one picture every 30 minutes
+*/30 * * * * /home/user/camera-upload/take_and_send.sh >> /home/user/camera-upload/camera.log 2>&1
