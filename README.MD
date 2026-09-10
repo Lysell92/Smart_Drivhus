@@ -560,6 +560,10 @@ The Python virtual environment, camera images, and generated PlantCV output are 
 
 ---
 
+# Wiring diagram
+
+A wiring diagram can be found in the same directory as this readme(wiring_diagram.PNG). It gives a rudimentary overview of our setup, and displays how the different sensors are interlinked with each other and with the microcontrollers.
+
 # Current Status
 
 The complete plant-analysis data pipeline has been tested successfully:
